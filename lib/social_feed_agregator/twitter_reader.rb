@@ -5,7 +5,7 @@ require "twitter"
 module SocialFeedAgregator
   class TwitterReader < BaseReader
 
-    attr_accessor :consumer_key, 
+    attr_accessor :consumer_key,
                   :consumer_secret,
                   :twitter_oauth_token,
                   :twitter_oauth_token_secret,
@@ -22,65 +22,65 @@ module SocialFeedAgregator
       @name = options[:twitter_user_name]
 
     end
-        
+
     def get_feeds(options={})
       super(options)
       @name = options[:name] if options[:name]
       count = options[:count] || 100
 
-      from_date = options[:from_date] || DateTime.new(1970,1,1) 
-      
-      client = ::Twitter.configure do |config|
+      from_date = options[:from_date] || DateTime.new(1970,1,1)
+
+      client = ::Twitter::REST::Client.new do |config|
         config.consumer_key = @consumer_key
         config.consumer_secret = @consumer_secret
         config.oauth_token = @oauth_token
         config.oauth_token_secret = @token_secret
       end
-                  
+
       feeds, i = [], 0
-      count_per_request =  200 #::Twitter::REST::API::Timelines::MAX_TWEETS_PER_REQUEST      
+      count_per_request =  200 #::Twitter::REST::API::Timelines::MAX_TWEETS_PER_REQUEST
 
       opts = {count: count < count_per_request ? count : count_per_request}
 
       parts = (count.to_f / count_per_request).ceil
 
       while (statuses = client.user_timeline(@name, opts)) && i < parts do
-        i+=1                
+        i+=1
 
-        statuses.each do |status|                
-          
+        statuses.each do |status|
+
           # Break if the date is less
           if status.created_at <= from_date
             i = parts
             break
           end
-          
+
           feed = fill_feed status
-          
-          block_given? ? yield(feed) : feeds << feed     
-          
+
+          block_given? ? yield(feed) : feeds << feed
+
           new_count = count - count_per_request * i
           opts[:count] = new_count < count_per_request ? new_count : count_per_request
-          opts[:max_id] = status.id.to_s          
-        end       
+          opts[:max_id] = status.id.to_s
+        end
       end
       feeds
     end
 
 
-    private 
+    private
     def fill_feed(status)
       tweet_type, picture_url, link  = 'status', '', ''
-           
-      if status.entities?                      
+
+      if status.entities?
         if status.media.any?
-          photo_entity = status.media.first          
+          photo_entity = status.media.first
           tweet_type = 'photo'
           picture_url = photo_entity.media_url
         end
 
         if status.urls.any?
-          url_entity = status.urls.first          
+          url_entity = status.urls.first
           tweet_type = 'link'
           link = url_entity.url
         end
@@ -88,20 +88,20 @@ module SocialFeedAgregator
 
       feed = Feed.new(
         feed_type: :twitter,
-        feed_id: status.id.to_s,       
+        feed_id: status.id.to_s,
 
-        user_id: status.user.id,
+        user_id: status.user.id.to_s,
         user_name: status.user.screen_name,
-        
+
         permalink: "https://twitter.com/#{status.user.screen_name}/status/#{status.id}", #status.url,
-        message: status.text,          
+        message: status.text,
         created_at: status.created_at,
 
         type: tweet_type,
         picture_url: picture_url,
         link: link
-      ) 
-    end   
+      )
+    end
   end
   Twitter = TwitterReader
 end
