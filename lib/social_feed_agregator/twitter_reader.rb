@@ -86,7 +86,7 @@ module SocialFeedAgregator
         end
       end
 
-      feed = Feed.new(
+      Feed.new(
         feed_type: :twitter,
         feed_id: status.id.to_s,
 

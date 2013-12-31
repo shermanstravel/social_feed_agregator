@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency("koala", "~> 1.6.0")
   spec.add_dependency("instagram", "~> 0.8")
+  spec.add_dependency("tumblr_client", "~> 0.8.2")
   spec.add_dependency("twitter", "~> 5.0.0")
   spec.add_dependency("rest-client", "1.6.7")
   spec.add_dependency("nokogiri", "~> 1.5")

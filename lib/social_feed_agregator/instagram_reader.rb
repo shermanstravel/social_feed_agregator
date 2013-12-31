@@ -1,5 +1,5 @@
-require "social_feed_agregator/base_reader"
-require "social_feed_agregator/feed"
+require 'social_feed_agregator/base_reader'
+require 'social_feed_agregator/feed'
 require 'instagram'
 
 module SocialFeedAgregator
@@ -44,6 +44,7 @@ module SocialFeedAgregator
 
     private
 
+    # search_user - convets a given username into a user id
     def search_user(username)
       return client.user_search(username).try(:[], 0).try(:[], 'id')
     end

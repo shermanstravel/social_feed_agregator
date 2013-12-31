@@ -10,14 +10,14 @@ module SocialFeedAgregator
     def initialize(options={})
       super(options)
       options.replace(SFA.default_options.merge(options))
-      @name = options[:pinterest_user_name]      
+      @name = options[:pinterest_user_name]
     end
-        
+
     def get_feeds(options={})
       super(options)
       @name = options[:name]  if options[:name]
       count = options[:count] || 25
-      from_date = options[:from_date] || DateTime.new(1970,1,1) 
+      from_date = options[:from_date] || DateTime.new(1970,1,1)
 
       feeds = []
       items = 0
@@ -34,17 +34,17 @@ module SocialFeedAgregator
         end
 
         feed = fill_feed item
-        
+
         block_given? ? yield(feed) : feeds << feed
       end
       feeds
-    end   
+    end
 
 
-    private 
+    private
     def fill_feed(item)
       desc = item.xpath('description').inner_text.match(/src="(\S+)".+<p>(.+)<\/p>/)
-        
+
       feed = Feed.new(
         feed_type: :pinterest,
         feed_id: item.xpath('guid').inner_text.match(/\d+/)[0].to_s,
@@ -52,7 +52,7 @@ module SocialFeedAgregator
         user_id: @name,
         user_name: @name,
 
-        # name: item.xpath('title').inner_text,          
+        # name: item.xpath('title').inner_text,
         permalink: item.xpath('link').inner_text,
         picture_url: desc[1],
         description: desc[2],
