@@ -29,7 +29,6 @@ module SocialFeedAgregator
 
       @name  = options[:name]
       @link  = options[:link]
-      # @story = options[:story]
       @message = options[:message]
       @caption = options[:caption]
       @created_at = options[:created_at]

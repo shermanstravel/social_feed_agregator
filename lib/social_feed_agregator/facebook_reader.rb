@@ -54,20 +54,19 @@ module SocialFeedAgregator
     private
 
     def fill_feed(post)
-      Feed.new(
-        feed_type: :facebook,
-        feed_id: post['id'],                
-        user_id: post['from']['id'],
-        user_name: post['from']['name'],        
-        permalink: "http://www.facebook.com/#{post['id'].gsub('_', '/posts/')}",
-        description: post['description'],
-        name: post['name'],
-        picture_url: post['picture'],
-        link: post['link'],
-        caption: post['caption'],        
-        message: post['message'],      
-        created_at: DateTime.parse(post["created_time"]),
-        type: post['type']
+      Feed.new(:feed_type => :facebook,
+        :feed_id => post['id'],
+        :user_id => post['from']['id'],
+        :user_name => post['from']['name'],
+        :permalink => "http://www.facebook.com/#{post['id'].gsub('_', '/posts/')}",
+        :description => post['description'],
+        :name => post['name'],
+        :picture_url => post['picture'],
+        :link => post['link'],
+        :caption => post['caption'],
+        :message => post['message'],
+        :creation_date => DateTime.parse(post["created_time"]),
+        :type => post['type']
       )
     end
 
