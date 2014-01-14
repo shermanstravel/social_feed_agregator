@@ -48,7 +48,6 @@ module SocialFeedAgregator
         i+=1
 
         statuses.each do |status|
-
           # Break if the date is less
           if status.created_at <= from_date
             i = parts
@@ -76,6 +75,7 @@ module SocialFeedAgregator
         if status.media.any?
           photo_entity = status.media.first
           tweet_type = 'photo'
+
           picture_url = photo_entity.media_url.to_s
         end
 

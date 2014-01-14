@@ -33,6 +33,7 @@ module SocialFeedAgregator
 
       begin
         i+=1
+
         posts.each do |post|
           items+=1
           break if items > count

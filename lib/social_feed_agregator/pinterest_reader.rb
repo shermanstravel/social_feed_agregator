@@ -23,7 +23,6 @@ module SocialFeedAgregator
       items = 0
 
       doc = Nokogiri::XML( RestClient.get("http://pinterest.com/#{@name}/feed.rss") )
-
       doc.xpath('//item').each do |item|
         items += 1
         break if items > count
@@ -44,20 +43,24 @@ module SocialFeedAgregator
     private
     def fill_feed(item)
       desc = item.xpath('description').inner_text.match(/src="(\S+)".+<p>(.+)<\/p>/)
+        pin_url = item.xpath('link').inner_text
 
-      feed = Feed.new(
-        feed_type: :pinterest,
-        feed_id: item.xpath('guid').inner_text.match(/\d+/)[0].to_s,
+        #Fetch big pin image
+        pinterest = Nokogiri::HTML(RestClient.get(pin_url))
+        picture_url = pinterest.xpath('//meta[@name="og:image"]/@content').map(&:value).first
 
-        user_id: @name,
-        user_name: @name,
-
-        # name: item.xpath('title').inner_text,
-        permalink: item.xpath('link').inner_text,
-        picture_url: desc[1],
-        description: desc[2],
-        created_at: DateTime.parse(item.xpath('pubDate').inner_text), #.strftime("%Y-%m-%d %H:%M:%S")
-      )
+        feed = Feed.new(
+          feed_type: :pinterest,
+          feed_id: item.xpath('guid').inner_text.match(/\d+/)[0].to_s,
+          user_id: @name,
+          user_name: @name,
+          title: item.xpath('title').inner_text,
+          permalink: pin_url,
+          picture_url: picture_url,
+          #picture_url: desc[1],
+          description: desc[2],
+          created_at: DateTime.parse(item.xpath('pubDate').inner_text), #.strftime("%Y-%m-%d %H:%M:%S")
+        )
     end
   end
   Pinterest = PinterestReader
