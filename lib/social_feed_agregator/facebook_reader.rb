@@ -44,7 +44,7 @@ module SocialFeedAgregator
             break
           end
 
-          feed = fill_feed post
+          feed = fill_feed(post, graph)
 
           block_given? ? yield(feed) : feeds << feed
         end
@@ -54,7 +54,7 @@ module SocialFeedAgregator
 
     private
 
-    def fill_feed(post)
+    def fill_feed(post, graph)
       Feed.new(:feed_type => :facebook,
         :feed_id => post['id'],
         :user_id => post['from']['id'],
@@ -62,11 +62,11 @@ module SocialFeedAgregator
         :permalink => "http://www.facebook.com/#{post['id'].gsub('_', '/posts/')}",
         :description => post['description'],
         :name => post['name'],
-        :picture_url => post['picture'],
+        :picture_url => graph.get_picture(post["object_id"]),
         :link => post['link'],
         :caption => post['caption'],
         :message => post['message'],
-        :creation_date => DateTime.parse(post["created_time"]),
+        :creation_date => DateTime.parse(post["created_time"]).to_time,
         :type => post['type']
       )
     end
