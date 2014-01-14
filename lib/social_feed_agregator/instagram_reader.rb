@@ -60,7 +60,7 @@ module SocialFeedAgregator
         :user_id => item['user']['id'],
         :user_name => item['user']['full_name'],
         :permalink => item['link'],
-        :picture_url => item['images']['thumbnail']['url'],
+        :picture_url => item['images']['low_resolution']['url'],
         :description => item['caption']['text'],
         :type => item['type'],
         :link => item['link'],
