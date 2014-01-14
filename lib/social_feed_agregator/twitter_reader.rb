@@ -76,13 +76,13 @@ module SocialFeedAgregator
         if status.media.any?
           photo_entity = status.media.first
           tweet_type = 'photo'
-          picture_url = photo_entity.media_url
+          picture_url = photo_entity.media_url.to_s
         end
 
         if status.urls.any?
           url_entity = status.urls.first
           tweet_type = 'link'
-          link = url_entity.url
+          link = url_entity.url.to_s
         end
       end
 
