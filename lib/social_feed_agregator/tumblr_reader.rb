@@ -38,7 +38,16 @@ module SocialFeedAgregator
 
 
     private
+      def select_picture(item)
+        min_width = 148
+        min_height = 177
+        smallest_possible = item['photos'][0]['alt_sizes'].sort {|asx, asy| (asx['width'] + asx['height']) <=> (asy['width'] + asy['height'])}
+                                                          .select {|as| as['width'] >= min_width and as['height'] >= min_height}.first
 
+        return smallest_possible['url'] unless smallest_possible.blank?
+
+        item['photos'][0]['original_size']['url'] #As an alternative get the original
+      end
 
     def fill_feed(item)
       if item['type'] == 'photo'
@@ -46,13 +55,13 @@ module SocialFeedAgregator
           :feed_id => item['id'],
           :user_name => item['blog_name'],
           :permalink => item['post_url'],
-          :picture_url => item['photos'][0]['original_size']['url'],
+          :picture_url => select_picture(item),
           :image_permalink => item['image_permalink'],
           :type => item['type'],
           :link => item['permalink_url'],
           :name => item['slug'],
           :caption => item['caption'],
-          :created_date => Time.at(item['timestamp'].to_i)
+          :created_at => Time.at(item['timestamp'].to_i)
         )
       elsif item['type'] == 'video'
         Feed.new(:feed_type => :tumblr,
@@ -64,7 +73,7 @@ module SocialFeedAgregator
           :link => item['permalink_url'],
           :name => item['slug'],
           :caption => item['player'].first["embed_code"],
-          :created_date => Time.at(item['timestamp'].to_i)
+          :created_at => Time.at(item['timestamp'].to_i)
         )
       end
     end

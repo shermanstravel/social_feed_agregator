@@ -72,7 +72,7 @@ module SocialFeedAgregator
         :link => post['link'],
         :caption => post['caption'],
         :message => post['message'],
-        :creation_date => DateTime.parse(post["created_time"]).to_time,
+        :created_at => DateTime.parse(post["created_time"]).to_time,
         :type => post['type']
       )
     end
