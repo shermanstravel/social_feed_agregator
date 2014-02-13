@@ -21,6 +21,11 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
 
+  # the faraday gem is being added with this specific version
+  # to avoid the issue bundler is having to find a compatible version
+  # to all gems that depend on faraday. It may be removed in the future
+  # when he stops doing that.
+  spec.add_dependency("faraday", "0.8.9")
   spec.add_dependency("instagram", "~> 0.8")
   spec.add_dependency("koala", "~> 1.9.0")
   spec.add_dependency("tumblr_client", "~> 0.8.2")
