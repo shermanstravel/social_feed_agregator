@@ -25,14 +25,13 @@ Gem::Specification.new do |spec|
   # to avoid the issue bundler is having to find a compatible version
   # to all gems that depend on faraday. It may be removed in the future
   # when he stops doing that.
+  spec.add_dependency("rest-client", "1.6.7")
   spec.add_dependency("faraday", "0.8.9")
   spec.add_dependency("instagram", "~> 0.8")
   spec.add_dependency("koala", "~> 1.9.0")
   spec.add_dependency("tumblr_client", "~> 0.8.2")
   spec.add_dependency("twitter", "~> 5.0.0")
-  spec.add_dependency("rest-client", "1.6.7")
   spec.add_dependency("nokogiri", "~> 1.5")
-  spec.add_dependency("rest-client")
   spec.add_dependency("json", "~> 1.8.0")
   spec.add_dependency("twitter-text", "~> 1.6.1")
 end
