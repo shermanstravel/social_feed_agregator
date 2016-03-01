@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency("koala", "~> 2.0")
   spec.add_dependency("tumblr_client", "~> 0.8.2")
   spec.add_dependency("twitter", "~> 5.0.0")
-  spec.add_dependency("nokogiri", "~> 1.5")
+  spec.add_dependency("nokogiri", "~> 1.6.0")
   spec.add_dependency("json", "~> 1.8.0")
   spec.add_dependency("twitter-text", "~> 1.6.1")
 end
