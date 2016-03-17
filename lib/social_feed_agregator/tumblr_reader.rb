@@ -29,7 +29,7 @@ module SocialFeedAgregator
       feed_data = client.posts(blog)
 
       # send data to the resolver
-      return feed_data['posts'].take(number_of_feeds_requested).map do |feed_item|
+      return Array(feed_data['posts']).take(number_of_feeds_requested).map do |feed_item|
         feed = fill_feed(feed_item)
         yield(feed) if block_given?
         feed
